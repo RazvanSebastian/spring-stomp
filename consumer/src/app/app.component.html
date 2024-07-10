@@ -1,0 +1,7 @@
+<div *ngIf="isLoggedIn === null; else appContent">...Loading...</div>
+<ng-template #appContent>
+  <app-login *ngIf="!isLoggedIn; else loggedInTemplate"></app-login>
+  <ng-template #loggedInTemplate>
+    <app-notifications></app-notifications>
+  </ng-template>
+</ng-template>

@@ -1,0 +1,19 @@
+<div class="container mt-2 border">
+  <button class="btn btn-primary" (click)="handleConnection()">
+    {{ isConnected ? "Disconnect" : "Connect" }}
+  </button>
+  <div class="row mt-2">
+    <div class="col">
+      Notifications
+      <ul *ngFor="let item of notifications">
+        <li>{{ item }}</li>
+      </ul>
+    </div>
+    <div class="col">
+      User Notifications
+      <ul *ngFor="let item of userNotifications">
+        <li>{{ item }}</li>
+      </ul>
+    </div>
+  </div>
+</div>
