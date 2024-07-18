@@ -23,7 +23,6 @@ public class WebSocketBrokerConfig implements WebSocketMessageBrokerConfigurer {
                 .setHandshakeHandler(handshakeHandler)
                 .setAllowedOrigins("*")
                 .withSockJS();
-//        registry.setErrorHandler(new StompSubProtocolErrorHandler());
     }
 
 

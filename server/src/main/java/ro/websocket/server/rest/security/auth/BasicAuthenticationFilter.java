@@ -13,6 +13,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
+import ro.websocket.server.commons.UserDetails;
 import ro.websocket.server.rest.security.jwt.JwtService;
 
 import java.io.IOException;
@@ -40,6 +41,16 @@ public class BasicAuthenticationFilter extends AbstractAuthenticationProcessingF
 
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException, ServletException {
+        setAccessTokenCookie(authResult, response);
+        setResponseBodyWithUserDetails(authResult, response);
+    }
+
+    @Override
+    protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) throws IOException, ServletException {
+        response.sendError(HttpServletResponse.SC_UNAUTHORIZED, failed.getMessage());
+    }
+
+    private void setAccessTokenCookie(Authentication authResult, HttpServletResponse response) {
         final String token = this.jwtService.generateToken(authResult.getName());
         Cookie cookie = new Cookie("access_token", token);
         cookie.setPath("/");
@@ -47,8 +58,8 @@ public class BasicAuthenticationFilter extends AbstractAuthenticationProcessingF
         response.addCookie(cookie);
     }
 
-    @Override
-    protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) throws IOException, ServletException {
-        response.sendError(HttpServletResponse.SC_UNAUTHORIZED, failed.getMessage());
+    private void setResponseBodyWithUserDetails(Authentication authResult, HttpServletResponse response) throws IOException {
+        response.setContentType("application/json");
+        response.getWriter().write(mapper.writeValueAsString(new UserDetails(authResult)));
     }
 }

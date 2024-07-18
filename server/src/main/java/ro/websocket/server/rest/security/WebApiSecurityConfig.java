@@ -1,6 +1,7 @@
 package ro.websocket.server.rest.security;
 
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -102,8 +103,8 @@ public class WebApiSecurityConfig {
     }
 
     @Bean
-    public JwtService jwtService() {
-        return new JwtService();
+    public JwtService jwtService(@Value("${jwt.secret}") String jwtSecret) {
+        return new JwtService(jwtSecret);
     }
 
     @Bean
