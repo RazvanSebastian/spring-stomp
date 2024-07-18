@@ -95,11 +95,10 @@ public class WebApiSecurityConfig {
     }
 
     @Bean
-    public UserDetailsService userDetailsService(PasswordEncoder passwordEncoder) {
-        User user1 = new User("user1", passwordEncoder.encode("user1"), List.of(UserRole.USER::getRoleWithPrefix));
-        User user2 = new User("user2", passwordEncoder.encode("user2"), List.of(UserRole.USER::getRoleWithPrefix));
-        User user3 = new User("notifier", passwordEncoder.encode("notifier"), List.of(UserRole.NOTIFIER::getRoleWithPrefix));
-        return new InMemoryUserDetailsManager(user1, user2, user3);
+    public UserDetailsService userDetailsService(InMemoryUsers inMemoryUsers) {
+        InMemoryUserDetailsManager inMemoryUserDetailsManager = new InMemoryUserDetailsManager();
+        inMemoryUsers.getInMemoryUsers().forEach(inMemoryUserDetailsManager::createUser);
+        return inMemoryUserDetailsManager;
     }
 
     @Bean
@@ -110,6 +109,11 @@ public class WebApiSecurityConfig {
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    public InMemoryUsers inMemoryUsers(PasswordEncoder passwordEncoder) {
+        return new InMemoryUsers(passwordEncoder);
     }
 
     private BasicAuthenticationFilter basicAuthenticationFilter(JwtService jwtService, AuthenticationManager authenticationManager) {

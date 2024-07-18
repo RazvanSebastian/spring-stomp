@@ -9,7 +9,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @Getter
 @Setter
-public class Payload {
+public class Notification {
     private String message;
     private String userId;
 }

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from './service/auth.service';
 import { WebsocketService } from './service/websocket.service';
+import { UserDetails } from './models';
 
 @Component({
   selector: 'app-root',
@@ -9,6 +10,7 @@ import { WebsocketService } from './service/websocket.service';
 })
 export class AppComponent implements OnInit {
   isLoggedIn: boolean | null = null;
+  userDetails: UserDetails | null = null;
 
   notifications: string[] = [];
   sessionId: string | undefined;
@@ -22,8 +24,12 @@ export class AppComponent implements OnInit {
     this.authService.isLoggedIn$.subscribe((isLoggedIn) => {
       this.isLoggedIn = isLoggedIn;
     });
+    this.authService.userDetails$.subscribe((userDetails) => {
+      this.userDetails = userDetails;
+    });
     this.authService.isAuthenticated().subscribe({
-      next: () => {
+      next: (response) => {
+        this.authService.userDetails$.next(response.body as UserDetails);
         this.authService.isLoggedIn$.next(true);
         this.websocketService.connectToServer();
       },

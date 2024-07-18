@@ -1,7 +1,14 @@
 <div *ngIf="isLoggedIn === null; else appContent">...Loading...</div>
 <ng-template #appContent>
-  <app-login *ngIf="!isLoggedIn; else loggedInTemplate"></app-login>
+  <app-login
+    *ngIf="!isLoggedIn && !userDetails; else loggedInTemplate"
+  ></app-login>
   <ng-template #loggedInTemplate>
-    <app-notifications></app-notifications>
+    <app-notifications
+      *ngIf="userDetails?.roles?.includes('ROLE_USER')"
+    ></app-notifications>
+    <app-notifier
+      *ngIf="userDetails?.roles?.includes('ROLE_NOTIFIER')"
+    ></app-notifier>
   </ng-template>
 </ng-template>

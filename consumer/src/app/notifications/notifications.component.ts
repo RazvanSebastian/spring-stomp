@@ -1,7 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { WebsocketService } from '../service/websocket.service';
 import { StompSubscription } from '@stomp/stompjs';
-import { Subject } from 'rxjs';
+import { WebsocketService } from '../service/websocket.service';
 
 @Component({
   selector: 'app-notifications',
@@ -42,13 +41,13 @@ export class NotificationsComponent implements OnInit, OnDestroy {
 
   private subscribeToTopics() {
     this.generalSubscription = this.websocketService.subscribeToStompServer(
-      '/all/hello-all',
+      '/all/notification',
       (message) => {
         this.notifications = [...this.notifications, message.body];
       }
     );
     this.specificSubscription = this.websocketService.subscribeToStompServer(
-      `/user/specific-user/${this.websocketService.sessionId}/hello`,
+      `/user/specific-user/${this.websocketService.sessionId}/notification`,
       (message) => {
         this.userNotifications = [...this.userNotifications, message.body];
       }

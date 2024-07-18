@@ -1,0 +1,36 @@
+<div class="container mt-4">
+  <select
+    class="form-select"
+    [(ngModel)]="selectedUser"
+    aria-label="Default select example"
+  >
+    <option value="" selected disabled>Select user to notify</option>
+    <option *ngFor="let item of notifiableUsers" [value]="item">
+      {{ item }}
+    </option>
+  </select>
+  <div class="mt-2">
+    <input
+      type="text"
+      class="form-control"
+      placeholder="Message"
+      [(ngModel)]="notificationMessage"
+    />
+    <div class="d-flex">
+      <button
+        class="btn btn-primary mt-2"
+        [disabled]="!selectedUser || !notificationMessage"
+        (click)="notifyUser()"
+      >
+        Send to user
+      </button>
+      <button
+        class="btn btn-primary mt-2"
+        [disabled]="!notificationMessage"
+        (click)="notifyAll()"
+      >
+        Send to all
+      </button>
+    </div>
+  </div>
+</div>
